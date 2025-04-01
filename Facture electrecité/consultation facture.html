@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Consultation des factures</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f0f2f5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Liste des factures */
+        .invoice-list {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .invoice-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            margin: 0.5rem 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+
+        .invoice-item:hover {
+            transform: translateX(5px);
+            background: #e9ecef;
+        }
+
+        .invoice-date {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .invoice-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-unpaid {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Détails de la facture */
+        .invoice-details {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 2rem;
+            position: sticky;
+            top: 20px;
+        }
+
+        .detail-header {
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .detail-label {
+            color: #6c757d;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .meter-photo {
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #dee2e6;
+            margin: 1rem 0;
+        }
+
+        .download-btn {
+            background: #0d6efd;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-btn:hover {
+            background: #0b5ed7;
+        }
+
+        /* Layout */
+        .dashboard-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Mes factures</h1>
+        
+        <div class="dashboard-layout">
+            <!-- Liste des factures -->
+            <div class="invoice-list">
+                <div class="invoice-item">
+                    <div>
+                        <div class="invoice-date">15 Mars 2024</div>
+                        <div class="invoice-amount">450,00 DH TTC</div>
+                    </div>
+                    <div class="invoice-status status-paid">Payée</div>
+                </div>
+                
+                <div class="invoice-item">
+                    <div>
+                        <div class="invoice-date">15 Février 2024</div>
+                        <div class="invoice-amount">380,00 DH TTC</div>
+                    </div>
+                    <div class="invoice-status status-unpaid">Impayée</div>
+                </div>
+            </div>
+
+            <!-- Détails de la facture -->
+            <div class="invoice-details">
+                <div class="detail-header">
+                    <h2>Détails de la facture</h2>
+                    <div class="detail-item">
+                        <span class="detail-label">Client :</span>
+                        <span class="detail-value">Mohamed Ali</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Adresse :</span>
+                        <span class="detail-value">Rue Hassan II, Tétouan</span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Consommation :</span>
+                    <span class="detail-value">120 KWH</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Prix HT :</span>
+                    <span class="detail-value">381,36 DH</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">TVA (18%) :</span>
+                    <span class="detail-value">68,64 DH</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Total TTC :</span>
+                    <span class="detail-value">450,00 DH</span>
+                </div>
+
+                <div class="detail-item">
+                    <span class="detail-label">Photo du compteur :</span>
+                </div>
+                <img src="placeholder-compteur.jpg" alt="Compteur électrique" class="meter-photo">
+
+                <button class="download-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-download" viewBox="0 0 16 16">
+                        <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                        <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708z"/>
+                    </svg>
+                    Télécharger PDF
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

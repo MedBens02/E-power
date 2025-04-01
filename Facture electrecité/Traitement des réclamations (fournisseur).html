@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Traitement des réclamations</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Styles de base */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #f8f9fa;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* En-tête */
+        .header {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-buttons .btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid #dee2e6;
+            margin-left: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .filter-buttons .btn.active {
+            background: #2196F3;
+            color: white;
+            border-color: #2196F3;
+        }
+
+        /* Liste des réclamations */
+        .complaints-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .complaint-item {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .complaint-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .complaint-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .complaint-type {
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 4px 12px;
+            border-radius: 15px;
+        }
+
+        .type-leak {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .type-bill {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .type-other {
+            background: #f5f5f5;
+            color: #616161;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .attachments-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 1rem 0;
+        }
+
+        .attachment-item {
+            width: 100%;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h2>15 Réclamations en attente</h2>
+            <div class="filter-buttons">
+                <button class="btn active">Toutes</button>
+                <button class="btn">Aujourd'hui</button>
+                <button class="btn">Cette semaine</button>
+            </div>
+        </div>
+
+        <div class="complaints-grid">
+            <!-- Réclamation 1 -->
+            <div class="complaint-item" data-id="1" onclick="openComplaint(1)">
+                <div class="complaint-meta">
+                    <span class="complaint-type type-leak">
+                        <i class="fas fa-tint"></i> Fuite externe
+                    </span>
+                    <span class="text-muted">15/07/2023</span>
+                </div>
+                <p class="text-truncate">Fuite observée près du compteur principal, risque d'accident...</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Client: Ahmed Ali</small>
+                    <span class="badge bg-warning">En attente</span>
+                </div>
+            </div>
+
+            <!-- Réclamation 2 -->
+            <div class="complaint-item" data-id="2" onclick="openComplaint(2)">
+                <div class="complaint-meta">
+                    <span class="complaint-type type-bill">
+                        <i class="fas fa-file-invoice"></i> Facture
+                    </span>
+                    <span class="text-muted">14/07/2023</span>
+                </div>
+                <p class="text-truncate">Discrepancy dans le calcul de la TVA sur la facture de juin</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Client: Fatima Zahra</small>
+                    <span class="badge bg-warning">En attente</span>
+                </div>
+            </div>
+
+            <!-- Réclamation 3 -->
+            <div class="complaint-item" data-id="3" onclick="openComplaint(3)">
+                <div class="complaint-meta">
+                    <span class="complaint-type type-other">
+                        <i class="fas fa-question-circle"></i> Autre
+                    </span>
+                    <span class="text-muted">13/07/2024</span>
+                </div>
+                <p class="text-truncate">Demande de changement d'adresse non prise en compte</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">Client: Karim Ben</small>
+                    <span class="badge bg-warning">En attente</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="complaintModal">
+        <div class="modal-content">
+            <h3 class="mb-4"><i class="fas fa-exclamation-triangle me-2"></i>Détails de la réclamation</h3>
+            
+            <div class="mb-3">
+                <label class="form-label">Type:</label>
+                <div id="complaintType" class="complaint-type type-leak"></div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <label class="form-label">Date:</label>
+                    <div id="complaintDate" class="fw-bold"></div>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">Client:</label>
+                    <div id="complaintClient" class="fw-bold"></div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Description:</label>
+                <p id="complaintDescription" class="text-muted"></p>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Pièces jointes:</label>
+                <div class="attachments-grid" id="complaintAttachments"></div>
+            </div>
+
+            <textarea class="form-control mb-3" 
+                      rows="4" 
+                      placeholder="Ajouter un commentaire de résolution..."></textarea>
+
+            <button class="btn btn-success float-end" onclick="resolveComplaint()">
+                <i class="fas fa-check-circle me-2"></i>Marquer comme résolu
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const complaints = {
+            1: {
+                type: "Fuite externe",
+                date: "15/07/2023",
+                client: "Ahmed Ali",
+                description: "Fuite observée près du compteur principal, risque d'accident. Une flaque d'eau persistante est visible.",
+                attachments: ["leak1.jpg", "leak2.jpg"]
+            },
+            2: {
+                type: "Facture",
+                date: "14/07/2023",
+                client: "Fatima Zahra",
+                description: "Discrepancy dans le calcul de la TVA sur la facture de juin. Montant HT incorrect selon le contrat.",
+                attachments: ["bill.jpg"]
+            },
+            3: {
+                type: "Autre",
+                date: "13/07/2023",
+                client: "Karim Benzema",
+                description: "Demande de changement d'adresse effectuée le 01/07 non prise en compte dans le système.",
+                attachments: []
+            }
+        };
+
+        function openComplaint(id) {
+            const complaint = complaints[id];
+            document.getElementById('complaintType').innerHTML = `
+                <i class="fas ${getTypeIcon(complaint.type)}"></i> ${complaint.type}
+            `;
+            document.getElementById('complaintDate').textContent = complaint.date;
+            document.getElementById('complaintClient').textContent = complaint.client;
+            document.getElementById('complaintDescription').textContent = complaint.description;
+            
+            const attachmentsGrid = document.getElementById('complaintAttachments');
+            attachmentsGrid.innerHTML = complaint.attachments.map(img => `
+                <img src="${img}" class="attachment-item" alt="Pièce jointe">
+            `).join('');
+            
+            document.getElementById('complaintModal').style.display = 'flex';
+        }
+
+        function resolveComplaint() {
+            alert('Réclamation résolue avec succès !');
+            document.getElementById('complaintModal').style.display = 'none';
+        }
+
+        function getTypeIcon(type) {
+            return {
+                'Fuite externe': 'fa-tint',
+                'Facture': 'fa-file-invoice',
+                'Autre': 'fa-question-circle'
+            }[type];
+        }
+
+        // Fermer le modal
+        window.onclick = function(event) {
+            if (event.target === document.getElementById('complaintModal')) {
+                document.getElementById('complaintModal').style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

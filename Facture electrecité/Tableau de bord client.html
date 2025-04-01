@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord client</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+            background-color: #f5f6fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            padding: 20px;
+            color: white;
+            position: fixed;
+            height: 100%;
+        }
+
+        .logo {
+            font-size: 24px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .menu-item {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #34495e;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            padding: 30px;
+            width: calc(100% - 250px);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 18px;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+        }
+
+        .consumption-value {
+            font-size: 32px;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .bill-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #27ae60;
+        }
+
+        .unpaid {
+            color: #e74c3c;
+        }
+
+        .notification-badge {
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .graph-placeholder {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            height: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #7f8c8d;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">Mon Énergie</div>
+            <div class="menu-item">
+                <i class="fas fa-file-invoice"></i> Consulter les factures
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-tachometer-alt"></i> Saisir la consommation
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-exclamation-circle"></i> Réclamations
+            </div>
+            <div class="menu-item">
+                <i class="fas fa-user-circle"></i> Profil
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Résumé -->
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="card-title">Consommation du mois</div>
+                    <div class="consumption-value">145 KWH</div>
+                    <div class="progress-bar" style="margin-top: 15px;">
+                        <!-- Ajouter une barre de progression ici -->
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-title">Dernière facture</div>
+                    <div class="bill-status">
+                        <i class="fas fa-receipt"></i>
+                        <span>148.60 DH</span>
+                        <span class="unpaid">(Non payée)</span>
+                    </div>
+                </div>
+
+                <div class="summary-card">
+                    <div class="card-title">Notifications</div>
+                    <div class="notification-item">
+                        <span class="notification-badge">2 nouvelles</span>
+                        <div style="margin-top: 10px;">
+                            <div><i class="fas fa-check-circle"></i> Réclamation #45 résolue</div>
+                            <div><i class="fas fa-exclamation-triangle"></i> Anomalie détectée</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Graphique -->
+            <div class="graph-placeholder">
+                Graphique d'évolution de la consommation (intégrer Chart.js ici)
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+Admin #1:
+
+Email: medbens@gmail.com
+
+Password: test1234
+
+Client #1:
+
+Email: medcl@client.com
+
+Password: test1234

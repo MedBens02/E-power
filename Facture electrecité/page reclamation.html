@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Réclamations</title>
+    <style>
+        /* Style général */
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .claim-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 30px;
+        }
+
+        /* Section formulaire */
+        .claim-form {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: 500;
+        }
+
+        select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+
+        /* Style pour l'upload de fichiers */
+        .file-upload {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin-top: 15px;
+            transition: background 0.3s ease;
+        }
+
+        .file-upload:hover {
+            background: #f8f9fa;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .upload-label {
+            color: #3498db;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        /* Section historique */
+        .claim-history {
+            flex: 1;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-title {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .claim-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.2s ease;
+        }
+
+        .claim-item:hover {
+            transform: translateX(5px);
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .pending {
+            background: #f39c12;
+            color: white;
+        }
+
+        .resolved {
+            background: #2ecc71;
+            color: white;
+        }
+
+        /* Bouton de soumission */
+        .submit-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="claim-container">
+        <!-- Formulaire de réclamation -->
+        <div class="claim-form">
+            <h2 class="form-title">Nouvelle réclamation</h2>
+            <form>
+                <div class="form-group">
+                    <label>Type de réclamation</label>
+                    <select required>
+                        <option value="">Sélectionnez un type</option>
+                        <option>Fuite externe</option>
+                        <option>Fuite interne</option>
+                        <option>Facture</option>
+                        <option>Autre</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Description (obligatoire pour "Autre")</label>
+                    <textarea rows="4" placeholder="Décrivez votre réclamation..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Pièces jointes</label>
+                    <div class="file-upload">
+                        <input type="file" class="file-input" id="file">
+                        <label for="file" class="upload-label">
+                            📎 Cliquez pour ajouter des fichiers
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Envoyer la réclamation</button>
+            </form>
+        </div>
+
+        <!-- Historique des réclamations -->
+        <div class="claim-history">
+            <h2 class="history-title">Historique des réclamations</h2>
+            
+            <div class="claim-item">
+                <p><strong>Fuite externe</strong> - 15/03/2024</p>
+                <span class="status pending">En attente</span>
+            </div>
+
+            <div class="claim-item">
+                <p><strong>Facture</strong> - 10/03/2024</p>
+                <span class="status resolved">Résolu</span>
+            </div>
+
+            <div class="claim-item">
+                <p><strong>Autre (Problème de compteur)</strong> - 01/03/2024</p>
+                <span class="status resolved">Résolu</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

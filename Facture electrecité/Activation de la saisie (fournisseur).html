@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Activation de la saisie</title>
+    <style>
+        .activation-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .calendar-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day {
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            background: #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .active-period {
+            background: #d0ebff;
+            font-weight: bold;
+        }
+
+        .current-day {
+            background: #4dabf7;
+            color: white;
+        }
+
+        .toggle-section {
+            text-align: center;
+            padding: 1.5rem;
+            background: white;
+            border-radius: 12px;
+        }
+
+        .toggle-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #40c057;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .toggle-btn.inactive {
+            background: #ff6b6b;
+        }
+
+        h2 {
+            color: #2b2d42;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .status-indicator {
+            font-size: 1.2rem;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .active-status {
+            background: #d3f9d8;
+            color: #2b8a3e;
+        }
+
+        .inactive-status {
+            background: #ffe3e3;
+            color: #c92a2a;
+        }
+    </style>
+</head>
+<body>
+    <div class="activation-container">
+        <h2>🕒 Gestion des périodes de saisie</h2>
+        
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <div class="status-indicator active-status">Période active</div>
+                <div>Mois : Novembre 2023</div>
+            </div>
+            
+            <div class="calendar-grid">
+                <!-- Exemple de calendrier -->
+                <div class="calendar-day">28</div>
+                <div class="calendar-day">29</div>
+                <div class="calendar-day">30</div>
+                <div class="calendar-day">31</div>
+                <div class="calendar-day active-period">1</div>
+                <div class="calendar-day active-period">2</div>
+                <!-- ... autres jours ... -->
+                <div class="calendar-day current-day active-period">18</div>
+                <div class="calendar-day active-period">19</div>
+                <div class="calendar-day active-period">20</div>
+                <!-- ... suite du mois ... -->
+            </div>
+        </div>
+
+        <div class="toggle-section">
+            <button class="toggle-btn" onclick="this.classList.toggle('inactive')">
+                Activer la saisie
+            </button>
+            <p style="margin-top: 1rem; color: #666;">
+                Prochaine activation automatique : 18/12/2023
+            </p>
+        </div>
+    </div>
+</body>
+</html>
