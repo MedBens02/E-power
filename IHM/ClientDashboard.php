@@ -36,7 +36,9 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'client') {
                 </a>
             </div>
             <div class="menu-item">
-                <i class="fas fa-exclamation-circle"></i> Réclamations
+                <a href="Reclamations.php" style="text-decoration: none; color: inherit;">
+                    <i class="fas fa-exclamation-circle"></i> Réclamations
+                </a>
             </div>
             <div class="menu-item">
                 <a href="ProfileClient.php" style="text-decoration: none; color: inherit;">

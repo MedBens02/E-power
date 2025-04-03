@@ -57,4 +57,23 @@ class ConsommationMensuelle
         return $stmt->fetch(\PDO::FETCH_ASSOC) ?: null;
     }
 
+    public static function existsForMonth($clientId, $compteurId, $mois, $annee) {
+        $pdo = DB::connect();
+        $sql = "SELECT COUNT(*) AS count 
+                FROM consommations_mensuelles 
+                WHERE client_id = :clientId 
+                  AND compteur_id = :compteurId 
+                  AND mois = :mois 
+                  AND annee = :annee";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':clientId', $clientId, \PDO::PARAM_INT);
+        $stmt->bindValue(':compteurId', $compteurId, \PDO::PARAM_INT);
+        $stmt->bindValue(':mois', $mois, \PDO::PARAM_INT);
+        $stmt->bindValue(':annee', $annee, \PDO::PARAM_INT);
+        $stmt->execute();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return ($row && $row['count'] > 0);
+    }
+    
+
 }

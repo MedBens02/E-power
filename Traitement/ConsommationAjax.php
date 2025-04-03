@@ -60,22 +60,34 @@ if ($action === 'last_month_data') {
 // --------------------------------------
 // 4) Save monthly consumption
 // --------------------------------------
+// 4) Save monthly consumption
 if ($action === 'save_monthly_consumption') {
     // We'll read from $_POST and $_FILES
     $compteurId   = $_POST['compteur_id']   ?? null;
     $currentValue = (int)($_POST['currentValue'] ?? 0);
     $difference   = (int)($_POST['difference']   ?? 0);
 
+    // Get current month and year
+    $mois  = date('n');   // e.g., 1–12
+    $annee = date('Y');
+
+    // Use the new model method to check for an existing record
+    if (ConsommationMensuelle::existsForMonth($clientId, $compteurId, $mois, $annee)) {
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Vous avez déjà enregistré une consommation pour ce compteur ce mois-ci.'
+        ]);
+        exit();
+    }
+
     // If file is uploaded
     $uploadedPhotoPath = null;
     if (!empty($_FILES['photo']['name'])) {
-        // Move to some folder, e.g. 'uploads/'
         $tmpName = $_FILES['photo']['tmp_name'];
         $fileName = time() . '_' . $_FILES['photo']['name'];
         $destination = __DIR__ . '/../Uploads/' . $fileName;
         move_uploaded_file($tmpName, $destination);
-
-        // We'll store just the filename in DB
+        // Store just the filename in DB
         $uploadedPhotoPath = $fileName;
     }
 
@@ -94,21 +106,14 @@ if ($action === 'save_monthly_consumption') {
         exit();
     }
 
-    // 2) Update compteur total
+    // 2) Update compteur total (add the new difference)
     Compteur::updateConsumption($compteurId, $difference);
 
-    // 3) If you want to create a Facture with front-end computed prices:
-    $prixHt  = $_POST['prix_ht']  ?? null;
-
-    // If for some reason those values aren't provided, you can skip or do a server calc
+    // 3) Create a facture if a price is provided from front-end
+    $prixHt = $_POST['prix_ht'] ?? null;
     if ($prixHt !== null) {
-        // Insert the Facture referencing the new consumption
-        // Notice we use `$newId` as the consommation ID
-        $factureId = Facture::createDirectValues(
-            $clientId,
-            $newId,
-            $prixHt
-        );
+        // Use $newId as the consommation ID
+        $factureId = Facture::createDirectValues($clientId, $newId, $prixHt);
         if (!$factureId) {
             echo json_encode([
                 'status'  => 'error',
@@ -116,7 +121,6 @@ if ($action === 'save_monthly_consumption') {
             ]);
             exit();
         }
-        // Return the factureId if needed
         echo json_encode([
             'status'    => 'success',
             'message'   => 'Consommation et facture créées avec succès.',
@@ -125,8 +129,7 @@ if ($action === 'save_monthly_consumption') {
         exit();
     }
 
-    // Otherwise, if no direct price, or you're handling invoice creation differently
-    // then just return success for the consumption part
+    // Otherwise, if no price provided
     echo json_encode([
         'status'  => 'success',
         'message' => 'Consommation créée (pas de facture).'

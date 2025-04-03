@@ -35,7 +35,7 @@ if ($type === 'admin') {
         // Return a JSON success with redirect path
         echo json_encode([
             'status'   => 'success',
-            'redirect' => '../IHM/admin_dashboard.php'
+            'redirect' => '../IHM/tableau_bord_admin.php'
         ]);
         exit();
     } else {
