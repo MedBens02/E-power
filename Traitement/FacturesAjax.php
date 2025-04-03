@@ -66,6 +66,7 @@ if ($action === 'get_facture_details') {
 
     echo json_encode([
         'status'           => 'success',
+        'client_id'        => $row['client_id'],
         'client_nom'       => $row['client_nom'],
         'client_address'   => $row['client_address'],
         'consommation_kwh' => $row['consommation_kwh'],

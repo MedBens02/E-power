@@ -131,26 +131,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // 4) On “Enregistrer” => send data (compteur_id, difference, current_val, photo) to server
     submitConsumptionBtn.addEventListener('click', async (e) => {
       e.preventDefault();
-  
-      // If difference <= 0 => error
+    
+      // Check current day (if needed)
+      const currentDay = new Date().getDate();
+      if (currentDay < 1) {
+        alert("Vous ne pouvez enregistrer la consommation qu'après le 18 du mois.");
+        return;
+      }
+    
       if (difference <= 0) {
         alert('Aucune différence calculée, vérifiez vos valeurs.');
         return;
       }
-  
-      // We'll upload the photo as multipart/form-data, because we have a file
+    
       const formData = new FormData();
       formData.append('action', 'save_monthly_consumption');
       formData.append('compteur_id', selectedCompteurId);
       formData.append('currentValue', currentConsumption.value.trim());
       formData.append('difference', difference);
       formData.append('photo', compteurPhoto.files[0] || '');
-
-      // Also pass the front-end computed prices
+    
+      // Pass computed price if needed
       const htValue = parseFloat(prixHt.textContent);
-
       formData.append('prix_ht', htValue);
-  
+    
       try {
         const response = await fetch('../Traitement/ConsommationAjax.php', {
           method: 'POST',
@@ -158,11 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         const result = await response.json();
         if (result.status === 'success') {
-          alert('Consommation mensuelle enregistrée avec succès!');
-          if (result.factureId) {
-            window.open(`../Traitement/FacturePdf.php?facture_id=${result.factureId}`, '_blank');
-          }
-          // Optionally reset form / reload data
+          alert(result.message);
+          // Reset form and reload previous data
           currentConsumption.value = '';
           compteurPhoto.value = '';
           calculationResults.style.display = 'none';
@@ -175,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Erreur réseau lors de la sauvegarde.');
       }
     });
+    
   
     // Finally, initial load
     loadCompteurs();

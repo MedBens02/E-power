@@ -1,3 +1,3 @@
 <?php
-header('Location:Traitement/Login.php');
+header('Location:IHM/Login.php');
 ?>

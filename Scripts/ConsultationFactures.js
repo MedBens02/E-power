@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
     let currentFactureId   = null;
     let selectedCompteurId = null;
+    let currentFactureClientId   = null;
   
     // 1) Load all compteurs for this client
     async function loadCompteurs() {
@@ -145,6 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await res.json();
         if (data.status === 'success') {
           currentFactureId           = factureId;
+          currentFactureClientId     = data.client_id;
           clientName.textContent     = data.client_nom;
           clientAddress.textContent  = data.client_address;
           consommationKwh.textContent= data.consommation_kwh + ' KWH';
@@ -171,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Aucune facture sélectionnée.');
         return;
       }
-      window.open(`../Traitement/FacturePdf.php?facture_id=${currentFactureId}`, '_blank');
+      window.open(`../Traitement/FacturePdf.php?facture_id=${currentFactureId}&client_id=${currentFactureClientId}`, '_blank');
     });
   
     // Initial load: 1) load compteurs, then we will pick the first compteur’s factures
