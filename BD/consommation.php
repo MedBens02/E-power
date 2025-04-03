@@ -7,7 +7,7 @@ function getDernieresConsommations($clientId, $limit = 2) {
     $stmt = $pdo->prepare("
         SELECT * 
         FROM consommations_mensuelles
-        WHERE client_id = ?
+        WHERE compteur_id = ?
         ORDER BY annee DESC, mois DESC, id DESC
         LIMIT ?
     ");

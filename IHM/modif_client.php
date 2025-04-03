@@ -1,6 +1,6 @@
 <?php
 session_start();
-$client = $_SESSION['client_a_modifier'] ?? null;
+$client = $_SESSION['client_to_edit'] ?? null;
 
 if (!$client) {
     echo "Client à modifier non trouvé.";

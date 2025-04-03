@@ -1,166 +1,206 @@
 <?php
 session_start();
-$consommations = $_SESSION['consommations_annuelles'] ?? [];
+$data = $_SESSION['compare_data'] ?? [];
+$annee = $_SESSION['compare_annee'] ?? date('Y');
 $info = $_SESSION['info'] ?? null;
 $error = $_SESSION['error'] ?? null;
 
-// Optionnel si tu veux effacer le message après affichage
+// Optionnel : effacer les messages après affichage
 unset($_SESSION['info'], $_SESSION['error']);
 ?>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Importation Annuelle</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
-          
+        
         }
 
-        h2, h3 {
-            color: #0056b3;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        h2 {
+            color: #34495e;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .message {
+            padding: 10px 15px;
             margin: 10px 0;
-            padding: 10px;
             border-radius: 5px;
+            font-size: 1em;
+            text-align: center;
         }
 
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+        .success-message {
+            background-color: #dff0d8;
+            color: #3c763d;
         }
 
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .error-message {
+            background-color: #f2dede;
+            color: #a94442;
         }
 
+        /* Formulaire */
         form {
-            margin: 20px 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-right: 8px;
         }
 
         input[type="file"] {
-            margin: 10px 0;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
 
         button {
-            padding: 10px;
-            background-color: #0056b3;
+            background-color: #3498db;
             color: white;
             border: none;
-            border-radius: 5px;
+            padding: 8px 12px;
+            border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
 
         button:hover {
-            background-color: #003d80;
+            background-color: #2980b9;
         }
 
+        /* Tableau */
         table {
-            width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            width: 100%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
         }
 
         th, td {
-            padding: 12px;
+            padding: 15px;
+            text-align: center;
             border: 1px solid #ddd;
-            text-align: left;
         }
 
         th {
-            background-color: #f0f0f0;
-            font-weight: bold;
+            background-color: #3498db;
+            color: white;
         }
 
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        hr {
-            margin: 20px 0;
-            border: 0;
-            border-top: 1px solid #ddd;
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .alert {
+            color: red;
+            font-weight: bold;
+        }
+
+        .high-ecart {
+            background-color: #ffe6e6;
+            font-weight: bold;
+        }
+
+        .btn-create {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-create:hover {
+            background-color: #219150;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .ecart-red {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h2>Importation Annuelle</h2>
 
-        <!-- Affichage des messages d'information ou d'erreur -->
-        <?php if ($info): ?>
-            <div class="message success"><?= htmlspecialchars($info) ?></div>
+<h2>Importation Annuelle</h2>
+
+<?php if ($info): ?>
+    <div class="message success-message"><?= htmlspecialchars($info) ?></div>
+<?php endif; ?>
+<?php if ($error): ?>
+    <div class="message error-message"><?= htmlspecialchars($error) ?></div>
+<?php endif; ?>
+
+<!-- Formulaire d'upload -->
+<div class="center">
+    <form method="post" 
+          action="../traitement/routeur.php?action=importer_consommation_annuelle" 
+          enctype="multipart/form-data">
+        <label>Fichier TXT :</label>
+        <input type="file" name="fichier_txt" accept=".txt" required>
+        <button type="submit">Importer</button>
+    </form>
+</div>
+
+<h2>Comparaison Annuelle Agent vs Client - Année <?= htmlspecialchars($annee) ?></h2>
+
+<table>
+    <tr>
+        <th>Client</th>
+        <th>Conso Agent (KWh)</th>
+        <th>Conso Client (KWh)</th>
+        <th>Écart (KWh)</th>
+        <th>Action</th>
+    </tr>
+    <?php foreach($data as $row): ?>
+<?php
+    $ecart = $row['ecart'];
+    $ecartStyle = ($ecart > 4800) ? 'ecart-red' : '';
+    $dejaEnvoyee = $row['facture_plus_existe']; // Nouveau champ ajouté dans la fonction de récupération
+?>
+<tr>
+    <td><?= htmlspecialchars($row['nom'].' '.$row['prenom']) ?></td>
+    <td><?= htmlspecialchars($row['conso_agent']) ?></td>
+    <td><?= htmlspecialchars($row['conso_client']) ?></td>
+    <td class="<?= $ecartStyle ?>"><?= $ecart ?></td>
+    <td>
+        <?php if ($dejaEnvoyee): ?>
+            <span style="color:blue; font-weight:bold;">Facture+ déjà envoyée</span>
+        <?php elseif ($ecart > 50): ?>
+            <form method="post" action="../traitement/routeur.php?action=creer_facture_plus">
+                <input type="hidden" name="client_id" value="<?= $row['client_id'] ?>">
+                <input type="hidden" name="annee" value="<?= $row['annee'] ?>">
+                <input type="hidden" name="ecart" value="<?= $ecart ?>">
+                <button type="submit" class="btn-create">Créer Facture +</button>
+            </form>
+        <?php else: ?>
+            -
         <?php endif; ?>
-        <?php if ($error): ?>
-            <div class="message error"><?= htmlspecialchars($error) ?></div>
-        <?php endif; ?>
+    </td>
+</tr>
+<?php endforeach; ?>
 
-        <!-- Formulaire d'upload -->
-        <form method="post" 
-              action="../traitement/routeur.php?action=importer_consommation_annuelle" 
-              enctype="multipart/form-data">
-            <label for="fichier_txt">Fichier TXT :</label>
-            <input type="file" id="fichier_txt" name="fichier_txt" accept=".txt" required>
-            <button type="submit">Importer</button>
-        </form>
+</table>
 
-        <hr>
-        <h3>Liste des Consommations Annuelles</h3>
-
-        <!-- Tableau des consommations -->
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Client</th>
-                    <th>Agent</th>
-                    <th>Année</th>
-                    <th>Consommation</th>
-                    <th>Date Saisie</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php if (!empty($consommations)): ?>
-                    <?php foreach ($consommations as $c): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($c['id']) ?></td>
-                            <td><?= htmlspecialchars($c['client_id']) ?></td>
-                            <td><?= htmlspecialchars($c['agent_id']) ?></td>
-                            <td><?= htmlspecialchars($c['annee']) ?></td>
-                            <td><?= htmlspecialchars($c['consommation']) ?></td>
-                            <td><?= htmlspecialchars($c['date_saisie']) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="6" style="text-align: center;">Aucune consommation annuelle enregistrée</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
 </body>
 </html>

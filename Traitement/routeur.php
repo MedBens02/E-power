@@ -27,8 +27,95 @@ if (isset($_GET['action'])) {
         header("Location: ../ihm/dashboard.php");
         exit;
     }
+// Charger le formulaire de modification
+if ($action === 'load_modif_client') {
+    $id = $_GET['id'] ?? null;
+
+    if (!$id) {
+        $_SESSION['error'] = "ID client manquant.";
+        header("Location: ../ihm/clients.php");
+        exit;
+    }
+
+    // Récupérer les informations du client
+    $client = getClientById($id);
+    $_SESSION['client_to_edit'] = $client;
+
+    header("Location: ../ihm/modif_client.php");
+    exit;
+}
+
+// Enregistrer la modification d'un client
+if ($action === 'modifier_client' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $nom = $_POST['nom'];
+    $prenom = $_POST['prenom'];
+    $adresse = $_POST['adresse'];
+    $email = $_POST['email'];
+
+    updateClient($id, $nom, $prenom, $adresse, $email);
+
+    $_SESSION['clients'] = getAllClients();
+    header("Location: ../ihm/tableau_bord_admin.php?action=clients");
+    exit;
+}
 
     
+    if ($action === 'compare_annuel') {
+        $annee = $_GET['annee'] ?? date('Y');
+        require_once('../bd/comparaison.php');
+        $data = getTableauComparaison($annee);
+        $_SESSION['compare_data'] = $data;
+        $_SESSION['compare_annee'] = $annee;
+        header("Location: ../ihm/tableau_bord_admin.php?action=show_compare");
+        exit;
+    }
+
+    if ($action === 'creer_facture_plus' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        $clientId = $_POST['client_id'];
+        $annee    = $_POST['annee'];
+        $ecart    = $_POST['ecart'];
+    
+        require_once('../bd/facture_plus.php');
+        // Calculer le prix :
+        $prixHt = calculPrixEcart($ecart);
+    
+        // Insérer dans facture_plus
+        $factureId = creerFacturePlus($clientId, $annee, $ecart, $prixHt);
+    
+        $_SESSION['info'] = "Facture+ (ID=$factureId) créée pour le client $clientId (écart=$ecart).";
+        // On revient à la comparaison
+        header("Location: ../traitement/routeur.php?action=compare_annuel&annee=$annee");
+        exit;
+    }
+    
+
+    if ($action === 'importer_consommation_annuelle' && $_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!isset($_FILES['fichier_txt']) || $_FILES['fichier_txt']['error'] !== UPLOAD_ERR_OK) {
+            $_SESSION['error'] = "Erreur lors du téléchargement du fichier.";
+            header("Location: ../ihm/tableau_bord_admin.php?action=importation");
+            exit;
+        }
+    
+        // Déplacer le fichier dans ../uploads
+        $tmpName = $_FILES['fichier_txt']['tmp_name'];
+        $fileName = basename($_FILES['fichier_txt']['name']);
+        $destination = "../uploads/".$fileName;
+        move_uploaded_file($tmpName, $destination);
+    
+        // Importer via fonction BD
+        require_once('../bd/consommation_annuelle.php');
+        $nbInserts = importerConsommationAnnuelle($destination);
+    
+        
+    
+        $_SESSION['info'] = "Importation réussie ($nbInserts lignes insérées).";
+        header("Location: ../ihm/tableau_bord_admin.php?action=show_compare");
+        exit;
+    }
+    
+
+
 
 
     // ------------------------------
@@ -64,7 +151,7 @@ if (isset($_GET['action'])) {
         $_SESSION['reclamation_to_edit'] = $reclamation;
     
         // Charger les 2 dernières consommations pour ce client
-        $client_id = $reclamation['client_id'];
+        $client_id = $reclamation['compteur_id'];
         $consos = getDernieresConsommations($client_id, 2); 
         // getDernieresConsommations() = fonction BD qui renvoie les 2 plus récentes 
         // de la table consommations_mensuelles
@@ -130,43 +217,7 @@ if (isset($_GET['action'])) {
         exit;
     }
     
-    if ($action === 'load_importation_annuelle') {
-        // Charger la liste des consommations existantes
-        require_once('../bd/consommation_annuelle.php');
-        $all = getAllConsommationsAnnuelles();  // fonction BD
-        // Stocker en session pour affichage
-        $_SESSION['consommations_annuelles'] = $all;
-    
-        // Rediriger vers tableau_bord_admin.php?action=importation
-        header("Location: ../ihm/tableau_bord_admin.php?action=importation");
-        exit;
-    }
-    
-    if ($action === 'importer_consommation_annuelle' && $_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!isset($_FILES['fichier_txt']) || $_FILES['fichier_txt']['error'] !== UPLOAD_ERR_OK) {
-            $_SESSION['error'] = "Erreur lors du téléchargement du fichier.";
-            header("Location: ../ihm/tableau_bord_admin.php?action=importation");
-            exit;
-        }
-    
-        // Déplacer le fichier dans ../uploads
-        $tmpName = $_FILES['fichier_txt']['tmp_name'];
-        $fileName = basename($_FILES['fichier_txt']['name']);
-        $destination = "../uploads/".$fileName;
-        move_uploaded_file($tmpName, $destination);
-    
-        // Importer via fonction BD
-        require_once('../bd/consommation_annuelle.php');
-        $nbInserts = importerConsommationAnnuelle($destination);
-    
-        // Recharger la liste après l’import
-        $all = getAllConsommationsAnnuelles();
-        $_SESSION['consommations_annuelles'] = $all;
-    
-        $_SESSION['info'] = "Importation réussie ($nbInserts lignes insérées).";
-        header("Location: ../ihm/tableau_bord_admin.php?action=importation");
-        exit;
-    }
+  
     
 
 
