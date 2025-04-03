@@ -136,7 +136,7 @@ document.getElementById('btn-gestion-reclamations').addEventListener('click', ()
 
 
 document.getElementById('btn-gestion-import').addEventListener('click', () => {
-    window.location.href = "../traitement/routeur.php?action=compare_annuel&annee=2025";
+    window.location.href = "../traitement/routeur.php?action=compare_annuel&annee=2024";
 });
 
 

@@ -175,7 +175,7 @@ unset($_SESSION['info'], $_SESSION['error']);
     <?php foreach($data as $row): ?>
 <?php
     $ecart = $row['ecart'];
-    $ecartStyle = ($ecart > 4800) ? 'ecart-red' : '';
+    $ecartStyle = ($ecart > 480) ? 'ecart-red' : '';
     $dejaEnvoyee = $row['facture_plus_existe']; // Nouveau champ ajouté dans la fonction de récupération
 ?>
 <tr>
