@@ -6,7 +6,6 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'client') {
     header('Location: login.php');
     exit();
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -75,16 +74,18 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'client') {
                     </div>
                 </div>
 
-                <div class="summary-card">
-                    <div class="card-title">Notifications</div>
-                    <div class="notification-item">
-                        <span class="notification-badge">2 nouvelles</span>
-                        <div style="margin-top: 10px;">
-                            <div><i class="fas fa-check-circle"></i> Réclamation #45 résolue</div>
-                            <div><i class="fas fa-exclamation-triangle"></i> Anomalie détectée</div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Notifications card -->
+            <div class="summary-card">
+                <div class="card-title">Notifications</div>
+                <div id="notificationList"></div>
+            </div>
+
+            <!-- Modal + Overlay hidden by default -->
+            <div id="modalOverlay" class="modal-overlay" style="display:none;"></div>
+            <div id="notifModal" class="modal-box" style="display:none;">
+            <h2 id="modalTitle">Détails de la notification</h2>
+            <p id="modalMessage">...</p>
+            <button id="confirmBtn">Confirmer</button>
             </div>
 
             <!-- Graphique -->
@@ -94,4 +95,5 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'client') {
         </div>
     </div>
 </body>
+<script src="../Scripts/Notifications.js"></script>
 </html>

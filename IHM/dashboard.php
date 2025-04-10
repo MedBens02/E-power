@@ -123,11 +123,6 @@ $stats = $_SESSION['stats'] ?? [];
         <i class="fas fa-chart-bar"></i> Dashboard
     </div>
     <div class="menu-item" id="btn-gestion-import"><i class="fas fa-file-import"></i> Importation annuelle</div>
-    <div class="menu-item">
-        <a href="../Traitement/Signout.php" style="text-decoration: none; color: inherit;">
-            <i class="fas fa-sign-out"></i> Deconnexion
-        </a>
-    </div>
 </div>
 
 <!-- Main Content -->
@@ -236,7 +231,7 @@ document.getElementById('btn-gestion-reclamations').addEventListener('click', ()
 
 document.getElementById('btn-gestion-import').addEventListener('click', () => {
     
-    window.location.href = "../traitement/routeur.php?action=compare_annuel&annee=2025";
+    window.location.href = "../traitement/routeur.php?action=load_importation_annuelle";
 });
 </script>
 

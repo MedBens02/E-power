@@ -105,8 +105,7 @@ if (!isset($_SESSION['user_type']) || $_SESSION['user_type'] !== 'admin') {
     <i class="fas fa-chart-bar"></i> Dashboard
 </div>
 
-    <div class="menu-item" id="btn-gestion-import" ><i class="fas fa-file-import"></i> Importation annuelle</div>
-  
+    <div class="menu-item" id="btn-gestion-import"><i class="fas fa-file-import"></i> Importation annuelle</div>
 
     <div class="menu-item">
         <a href="../Traitement/Signout.php" style="text-decoration: none; color: inherit;">
@@ -136,10 +135,8 @@ document.getElementById('btn-gestion-reclamations').addEventListener('click', ()
 
 
 document.getElementById('btn-gestion-import').addEventListener('click', () => {
-    window.location.href = "../traitement/routeur.php?action=compare_annuel&annee=2024";
+    window.location.href = "../traitement/routeur.php?action=load_importation_annuelle";
 });
-
-
 
 // On vérifie l'action dans l'URL
 const params = new URLSearchParams(window.location.search);
@@ -186,13 +183,15 @@ else if (action === 'edit_reclamation') {
         .then(html => { mainContent.innerHTML = html; })
         .catch(err => console.error(err));
     }
-}else if (action === 'show_compare') {
+}else if (action === 'importation') {
+  // On charge la page partielle `import_annuel.php`
   fetch('import_annuel.php')
     .then(r => r.text())
-    .then(html => { mainContent.innerHTML = html; })
-    .catch(console.error);
+    .then(html => {
+      mainContent.innerHTML = html;
+    })
+    .catch(err => console.error('Erreur chargement import_annuel:', err));
 }
-
 
 
 

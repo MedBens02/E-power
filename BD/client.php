@@ -14,15 +14,6 @@ class ClientA {
         $this->created_at = $data['created_at'] ?? null;
     }
 }
-function updateClient($id, $nom, $prenom, $adresse, $email) {
-    global $pdo;
-    $stmt = $pdo->prepare("
-        UPDATE clients 
-        SET nom = ?, prenom = ?, adresse = ?, email = ? 
-        WHERE id = ?
-    ");
-    $stmt->execute([$nom, $prenom, $adresse, $email, $id]);
-}
 
 function getAllClients() {
     global $pdo;
@@ -35,11 +26,9 @@ function getClientById($id) {
     global $pdo;
     $stmt = $pdo->prepare("SELECT * FROM clients WHERE id = ?");
     $stmt->execute([$id]);
-    // Récupérer directement en tableau associatif
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    return $row ? $row : null;
+    return $row ? new ClientA($row) : null;
 }
-
 
 function ajouterClient($nom, $prenom, $email, $adresse, $mot_de_passe) {
     global $pdo;

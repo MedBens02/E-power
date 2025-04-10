@@ -178,7 +178,6 @@ $clients = $_SESSION['clients'] ?? [];
                           <button type="submit" class="btn btn-danger">Supprimer</button>
                           </form>
                           <a href="../traitement/routeur.php?action=load_modif_client&id=<?= $client->id ?>" class="btn btn-edit">Modifier</a>
-                          
                             </td>
 
                     </tr>

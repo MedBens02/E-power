@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 01, 2025 at 05:33 PM
+-- Generation Time: Apr 10, 2025 at 06:29 AM
 -- Server version: 8.3.0
 -- PHP Version: 8.1.28
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `admins` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `admins`
@@ -46,7 +46,8 @@ CREATE TABLE IF NOT EXISTS `admins` (
 INSERT INTO `admins` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `created_at`) VALUES
 (1, 'bens', 'med', 'medbens@gmail.com', '$2y$10$aA2ZSbPQxBZzVUliiiC4j.X35FUVuDNjFmhXrJ21BmmDjhs9vd5b.', '2025-03-28 00:07:02'),
 (2, 'John', 'Smith', 'admin1@electricbill.com', '$2y$10$zvBR11zYmLLpIxePF/gYIusEZaAs8Sbd3T0Ictydt3UsCRY/knWE6', '2025-04-01 10:24:38'),
-(3, 'Alice', 'Brown', 'admin2@electricbill.com', '$2y$10$rnEpjXhL.Pwpe.OB7mbUxuTui3GzVuHgtM..6KaQ6ZKcZ3LSFEIJW', '2025-04-01 10:24:38');
+(3, 'Alice', 'Brown', 'admin2@electricbill.com', '$2y$10$rnEpjXhL.Pwpe.OB7mbUxuTui3GzVuHgtM..6KaQ6ZKcZ3LSFEIJW', '2025-04-01 10:24:38'),
+(4, 'test', 'admin', 'admin@ad.com', '$2y$10$mwA3Tnzs7pYrJ4pI3NnRyu2NlO1sts9XwG55u1qT5xW9MEhtIetf6', '2025-04-03 00:51:10');
 
 -- --------------------------------------------------------
 
@@ -125,7 +126,6 @@ CREATE TABLE IF NOT EXISTS `clients` (
 
 INSERT INTO `clients` (`id`, `nom`, `prenom`, `email`, `mot_de_passe`, `adresse`, `created_at`) VALUES
 (1, 'client', 'med', 'medcl@client.com', '$2y$10$NsT1eOVPJvIK6RoBxAOcmOaattAKiNBgfrAq6CYjcg0.iEBgMsRZS', 'sadnkjbcjk b', '2025-03-28 00:23:49'),
-(2, 'Benani', 'Naima', 'client1@electricbill.com', '$2y$10$8Zz/ahE43Gw8vMthCzLZUO31A3G41cBpgMgOvRS8N8bR/Hd18xTZq', 'Rue des Fleurs, Tanger', '2025-04-01 10:24:38'),
 (3, 'El', 'Hassan', 'client2@electricbill.com', '$2y$10$jdHySr7VxmRkK2nFQLW/gO4OmxFrXrHwDK.lU7713.EZlC7cb0Xz6', 'Rue du Soleil, Casablanca', '2025-04-01 10:24:38'),
 (4, 'testdd', 'ajax', 'ajxtst@gmail.com', '$2y$10$KzCK5.1rE6Z8sItShEgQBO0drt7La6r05p/Q6kNTl6A.orE9ZCSIe\n', 'cdaklnv amafmmkd', '2025-04-01 10:41:17');
 
@@ -151,9 +151,9 @@ CREATE TABLE IF NOT EXISTS `compteurs` (
 --
 
 INSERT INTO `compteurs` (`id`, `client_id`, `description`, `consommation_totale`, `created_at`) VALUES
-(1, 1, 'Mon compteur 1', 775, '2025-04-01 10:24:38'),
+(1, 1, 'Mon compteur 1', 1060, '2025-04-01 10:24:38'),
 (2, 2, 'Mon compteur 1', 500, '2025-04-01 10:24:38'),
-(3, 1, 'Compteur Secondaire (Maison secondaire)', 250, '2025-04-01 13:30:03');
+(3, 1, 'Compteur Secondaire (Maison secondaire)', 495, '2025-04-01 13:30:03');
 
 -- --------------------------------------------------------
 
@@ -172,15 +172,15 @@ CREATE TABLE IF NOT EXISTS `consommations_annuelles` (
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
   KEY `agent_id` (`agent_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `consommations_annuelles`
 --
 
 INSERT INTO `consommations_annuelles` (`id`, `client_id`, `agent_id`, `annee`, `consommation`, `date_saisie`) VALUES
-(1, 1, 1, 2024, 1500, '2025-03-01'),
-(2, 2, 2, 2024, 2100, '2025-03-01');
+(12, 2, 1, 2024, 450, '2025-03-30'),
+(11, 1, 1, 2024, 500, '2025-03-30');
 
 -- --------------------------------------------------------
 
@@ -208,16 +208,26 @@ CREATE TABLE IF NOT EXISTS `consommations_mensuelles` (
 --
 
 INSERT INTO `consommations_mensuelles` (`id`, `client_id`, `compteur_id`, `mois`, `annee`, `valeur_compteur`, `photo_compteur`, `anomalie`) VALUES
-(1, 1, 1, 1, 2025, 120, 'compteur1_jan.jpg', 0),
-(2, 1, 1, 2, 2025, 130, 'compteur1_feb.jpg', 0),
-(3, 2, 2, 1, 2025, 200, 'compteur2_jan.jpg', 0),
-(4, 1, 1, 4, 2025, 160, 'placeholder-meter.jpg', 0),
-(5, 1, 1, 4, 2025, 70, 'placeholder-meter.jpg', 0),
-(6, 1, 3, 3, 2025, 270, 'compteur3_mar.jpg', 0),
-(7, 1, 3, 4, 2025, 300, 'compteur3_apr.jpg', 0),
-(8, 1, 1, 4, 2025, 100, '1743514239_enonce.jpg', 0),
-(9, 1, 1, 4, 2025, 70, '1743514477_test.jpg', 0),
-(10, 1, 1, 4, 2025, 75, '1743526512_enonce.jpg', 0);
+(37, 1, 3, 7, 2024, 44, 'compteur3_jul2024.jpg', 0),
+(36, 1, 1, 3, 2025, 106, 'compteur1_mar2025.jpg', 0),
+(35, 1, 1, 2, 2025, 107, 'compteur1_feb2025.jpg', 0),
+(34, 1, 1, 1, 2025, 107, 'compteur1_jan2025.jpg', 0),
+(33, 1, 1, 12, 2024, 100, 'compteur1_dec2024.jpg', 0),
+(32, 1, 1, 11, 2024, 100, 'compteur1_nov2024.jpg', 0),
+(31, 1, 1, 10, 2024, 100, 'compteur1_oct2024.jpg', 0),
+(30, 1, 1, 9, 2024, 100, 'compteur1_sep2024.jpg', 0),
+(29, 1, 1, 8, 2024, 100, 'compteur1_aug2024.jpg', 0),
+(28, 1, 1, 7, 2024, 100, 'compteur1_jul2024.jpg', 0),
+(38, 1, 3, 8, 2024, 44, 'compteur3_aug2024.jpg', 0),
+(39, 1, 3, 9, 2024, 44, 'compteur3_sep2024.jpg', 0),
+(40, 1, 3, 10, 2024, 44, 'compteur3_oct2024.jpg', 0),
+(41, 1, 3, 11, 2024, 44, 'compteur3_nov2024.jpg', 0),
+(42, 1, 3, 12, 2024, 44, 'compteur3_dec2024.jpg', 0),
+(43, 1, 3, 1, 2025, 44, 'compteur3_jan2025.jpg', 0),
+(44, 1, 3, 2, 2025, 44, 'compteur3_feb2025.jpg', 0),
+(45, 1, 3, 3, 2025, 48, 'compteur3_mar2025.jpg', 0),
+(49, 1, 3, 4, 2025, 42, '1743659224_photo_compteur_15_fevrier.jpg', 0),
+(48, 1, 1, 4, 2025, 75, '1743659208_photo_compteur_15_mars.jpg', 0);
 
 -- --------------------------------------------------------
 
@@ -247,9 +257,26 @@ CREATE TABLE IF NOT EXISTS `factures` (
 --
 
 INSERT INTO `factures` (`id`, `client_id`, `consommation_id`, `mois`, `annee`, `prix_ht`, `tva`, `statut_paiement`) VALUES
-(1, 1, 1, 1, 2025, 110.40, 18.00, 'payée'),
-(2, 1, 2, 2, 2025, 119.60, 18.00, 'non payée'),
-(3, 2, 3, 1, 2025, 220.00, 18.00, 'payée');
+(35, 1, 39, 9, 2024, 36.08, 18.00, 'payée'),
+(34, 1, 38, 8, 2024, 36.08, 18.00, 'payée'),
+(33, 1, 37, 7, 2024, 36.08, 18.00, 'payée'),
+(32, 1, 28, 7, 2024, 82.00, 18.00, 'payée'),
+(31, 1, 29, 8, 2024, 82.00, 18.00, 'payée'),
+(30, 1, 30, 9, 2024, 82.00, 18.00, 'payée'),
+(29, 1, 31, 10, 2024, 82.00, 18.00, 'payée'),
+(28, 1, 32, 11, 2024, 82.00, 18.00, 'payée'),
+(27, 1, 33, 12, 2024, 82.00, 18.00, 'payée'),
+(26, 1, 34, 1, 2025, 98.44, 18.00, 'payée'),
+(25, 1, 35, 2, 2025, 98.44, 18.00, 'payée'),
+(24, 1, 36, 3, 2025, 97.52, 18.00, 'payée'),
+(36, 1, 40, 10, 2024, 36.08, 18.00, 'payée'),
+(37, 1, 41, 11, 2024, 36.08, 18.00, 'payée'),
+(38, 1, 42, 12, 2024, 36.08, 18.00, 'payée'),
+(39, 1, 43, 1, 2025, 36.08, 18.00, 'payée'),
+(40, 1, 44, 2, 2025, 36.08, 18.00, 'payée'),
+(41, 1, 45, 3, 2025, 39.36, 18.00, 'payée'),
+(42, 1, 48, 4, 2025, 61.50, 18.00, 'non payée'),
+(43, 1, 49, 4, 2025, 34.44, 18.00, 'non payée');
 
 --
 -- Triggers `factures`
@@ -277,6 +304,27 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `facture_plus`
+--
+
+DROP TABLE IF EXISTS `facture_plus`;
+CREATE TABLE IF NOT EXISTS `facture_plus` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `client_id` int NOT NULL,
+  `annee` int NOT NULL,
+  `ecart` int NOT NULL,
+  `prix_ht` decimal(10,2) NOT NULL,
+  `tva` decimal(10,2) NOT NULL DEFAULT '18.00',
+  `prix_ttc` decimal(10,2) GENERATED ALWAYS AS ((`prix_ht` * (1 + (`tva` / 100)))) STORED,
+  `statut_paiement` enum('payée','non payée') DEFAULT 'non payée',
+  `date_creation` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `client_id` (`client_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `notifications`
 --
 
@@ -289,15 +337,20 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `lu` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `notifications`
 --
 
 INSERT INTO `notifications` (`id`, `client_id`, `message`, `date_envoi`, `lu`) VALUES
-(1, 1, 'Votre facture de Janvier est payée.', '2025-04-01 10:24:38', 0),
-(2, 2, 'Votre facture de Janvier est en attente de paiement.', '2025-04-01 10:24:38', 0);
+(1, 1, 'Votre facture de Janvier est payée.', '2025-04-01 10:24:38', 1),
+(2, 2, 'Votre facture de Janvier est en attente de paiement.', '2025-04-01 10:24:38', 0),
+(3, 1, 'Votre facture #45 a été réglée.', '2025-04-10 09:30:00', 1),
+(4, 1, 'Un nouveau relevé de compteur est disponible.', '2025-04-10 08:15:00', 0),
+(5, 1, 'Réclamation #12 est désormais résolue.', '2025-04-09 13:45:00', 1),
+(6, 1, 'Erreur de saisie détectée pour le mois de mars.', '2025-04-08 17:05:00', 0),
+(7, 1, 'Votre consommation d’avril est disponible dans votre espace.', '2025-04-07 15:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -309,6 +362,8 @@ DROP TABLE IF EXISTS `reclamations`;
 CREATE TABLE IF NOT EXISTS `reclamations` (
   `id` int NOT NULL AUTO_INCREMENT,
   `client_id` int NOT NULL,
+  `compteur_id` int DEFAULT NULL,
+  `facture_id` int DEFAULT NULL,
   `type` enum('Fuite externe','Fuite interne','Facture','Autre') NOT NULL,
   `description` text,
   `statut` enum('en attente','résolu') DEFAULT 'en attente',
@@ -316,16 +371,23 @@ CREATE TABLE IF NOT EXISTS `reclamations` (
   `pieces_jointes` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`),
-  KEY `idx_reclamation_statut` (`statut`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `idx_reclamation_statut` (`statut`),
+  KEY `fk_compteur_reclamations` (`compteur_id`),
+  KEY `fk_facture_reclamations` (`facture_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `reclamations`
 --
 
-INSERT INTO `reclamations` (`id`, `client_id`, `type`, `description`, `statut`, `date_creation`, `pieces_jointes`) VALUES
-(1, 1, 'Facture', 'Montant trop élevé pour janvier.', 'en attente', '2025-04-01 10:24:38', NULL),
-(2, 2, 'Autre', 'Service client injoignable ce week-end.', 'en attente', '2025-04-01 10:24:38', NULL);
+INSERT INTO `reclamations` (`id`, `client_id`, `compteur_id`, `facture_id`, `type`, `description`, `statut`, `date_creation`, `pieces_jointes`) VALUES
+(15, 1, 3, 8, 'Facture', 'dklvnaldnflkan', 'en attente', '2025-04-03 04:39:26', NULL),
+(10, 1, 1, 7, 'Facture', 'nwlANDLKNKLA NDKLNALK NKLAMDKLA', 'en attente', '2025-04-03 04:07:44', NULL),
+(11, 1, 3, 1, 'Fuite externe', 'kdmcmadkm.d', 'en attente', '2025-04-03 04:16:48', NULL),
+(12, 1, 3, 0, 'Fuite externe', 'zmv;zmlvz /af', 'résolu', '2025-04-03 04:17:10', NULL),
+(13, 1, 3, NULL, 'Fuite externe', 'm,kdm ;lamsd;lmfa', 'en attente', '2025-04-03 04:17:44', NULL),
+(14, 1, NULL, NULL, 'Autre', 'n kjbkjlknlkmn', 'en attente', '2025-04-03 04:19:37', NULL),
+(16, 1, 1, NULL, 'Fuite interne', 'njzjkn llkasn', 'en attente', '2025-04-03 04:39:54', NULL);
 
 -- --------------------------------------------------------
 

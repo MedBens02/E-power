@@ -102,6 +102,8 @@ $html = "
   </style>
 </head>
 <body>
+<p>Photo path: " . $photoCompteur . "</p>
+
   <div class='header'>
     <h1>Facture #{$facture['id']}</h1>
     <p>Date: " . date('d-m-Y') . "</p>
